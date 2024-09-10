@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/APP-MAX/static/css/main.be6c4107.css",
-    "main.js": "/APP-MAX/static/js/main.f93fad6d.js",
+    "main.css": "/APP-MAX/static/css/main.9ce70d6f.css",
+    "main.js": "/APP-MAX/static/js/main.996ebb4d.js",
     "static/js/453.4d40f7cc.chunk.js": "/APP-MAX/static/js/453.4d40f7cc.chunk.js",
     "index.html": "/APP-MAX/index.html",
-    "main.be6c4107.css.map": "/APP-MAX/static/css/main.be6c4107.css.map",
-    "main.f93fad6d.js.map": "/APP-MAX/static/js/main.f93fad6d.js.map",
+    "main.9ce70d6f.css.map": "/APP-MAX/static/css/main.9ce70d6f.css.map",
+    "main.996ebb4d.js.map": "/APP-MAX/static/js/main.996ebb4d.js.map",
     "453.4d40f7cc.chunk.js.map": "/APP-MAX/static/js/453.4d40f7cc.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.be6c4107.css",
-    "static/js/main.f93fad6d.js"
+    "static/css/main.9ce70d6f.css",
+    "static/js/main.996ebb4d.js"
   ]
 }
