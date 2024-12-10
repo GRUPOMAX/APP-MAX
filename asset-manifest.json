@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/APP-MAX/static/css/main.f5437295.css",
-    "main.js": "/APP-MAX/static/js/main.57bb36aa.js",
+    "main.js": "/APP-MAX/static/js/main.8b819235.js",
     "reactPlayerYouTube.js": "/APP-MAX/static/js/reactPlayerYouTube.5c156786.chunk.js",
     "reactPlayerSoundCloud.js": "/APP-MAX/static/js/reactPlayerSoundCloud.1ae47fe8.chunk.js",
     "reactPlayerVimeo.js": "/APP-MAX/static/js/reactPlayerVimeo.e3f5bae9.chunk.js",
@@ -19,7 +19,7 @@
     "static/js/453.740fa832.chunk.js": "/APP-MAX/static/js/453.740fa832.chunk.js",
     "index.html": "/APP-MAX/index.html",
     "main.f5437295.css.map": "/APP-MAX/static/css/main.f5437295.css.map",
-    "main.57bb36aa.js.map": "/APP-MAX/static/js/main.57bb36aa.js.map",
+    "main.8b819235.js.map": "/APP-MAX/static/js/main.8b819235.js.map",
     "reactPlayerYouTube.5c156786.chunk.js.map": "/APP-MAX/static/js/reactPlayerYouTube.5c156786.chunk.js.map",
     "reactPlayerSoundCloud.1ae47fe8.chunk.js.map": "/APP-MAX/static/js/reactPlayerSoundCloud.1ae47fe8.chunk.js.map",
     "reactPlayerVimeo.e3f5bae9.chunk.js.map": "/APP-MAX/static/js/reactPlayerVimeo.e3f5bae9.chunk.js.map",
@@ -38,6 +38,6 @@
   },
   "entrypoints": [
     "static/css/main.f5437295.css",
-    "static/js/main.57bb36aa.js"
+    "static/js/main.8b819235.js"
   ]
 }
