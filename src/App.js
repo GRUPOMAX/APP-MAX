@@ -1,9 +1,11 @@
+// src/App.js
+
 import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import DashboardMobile from './DashboardMobile';
 import Login from './Login';
 import Cadastro from './Cadastro';
-import CriarTicket  from './CriarTicket';
+import CriarTicket from './CriarTicket';
 import Planos from './Planos';
 import PlanoDetalhes from './PlanoDetalhes';
 import Financeiro from './Financeiro';
@@ -14,9 +16,10 @@ import Footer from './Footer';
 import Home from './Home';
 import Header from './Header'; // Importa o Header
 import MeuWifi from './MeuWiFi';
-import TodosOsDispositivos from './TodosOsDispositivos'; // Certifique-se de que o caminho está correto
-import TodosHosts from './TodosHosts'; // Importe o componente que exibirá todos os hosts
-
+import TodosOsDispositivos from './TodosOsDispositivos';
+import TodosHosts from './TodosHosts';
+import ConsentPopup from './ConsentPopup'; // Importa o Popup de consentimento
+import PrivacyPolicy from './PrivacyPolicy';  // Importando a página de privacidade
 
 import './App.css';
 
@@ -26,19 +29,17 @@ function App() {
   const [primaryColor, setPrimaryColor] = useState('#28a745');
   const [headerIconColor, setHeaderIconColor] = useState('#28a745');
   const [footerIconColor, setFooterIconColor] = useState('#28a745');
-  const [modulosPermitidos, setModulosPermitidos] = useState([]); // Estado para armazenar os módulos permitidos
+  const [modulosPermitidos, setModulosPermitidos] = useState([]);
+  const [hasConsented, setHasConsented] = useState(false); // Novo estado para controle do consentimento
 
-  // Define the table IDs for modules
-  const modulesTableId = 'msafdyz6sew21f1'; // Tabela de módulos
-  const colorsTableId = 'mn37trxp7ai1efw'; // Nova tabela de cores
-  const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5'; // Token de autenticação
-  const baseUrl = 'https://nocodb.nexusnerds.com.br/api/v2/tables/'; // URL base
+  const modulesTableId = 'msafdyz6sew21f1';
+  const colorsTableId = 'mn37trxp7ai1efw';
+  const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5';
+  const baseUrl = 'https://nocodb.nexusnerds.com.br/api/v2/tables/';
 
   useEffect(() => {
-    // Função para buscar configurações do NocoDB
     const fetchAppSettings = async () => {
       try {
-        // Fetch de cores
         const response = await fetch(`${baseUrl}${colorsTableId}/records`, {
           method: 'GET',
           headers: {
@@ -55,8 +56,6 @@ function App() {
             setPrimaryColor(settingsData.primaryColor || '#28a745');
             setHeaderIconColor(settingsData.headerIconColor || '#28a745');
             setFooterIconColor(settingsData.footerIconColor || '#28a745');
-
-            // Atualiza as variáveis CSS dinamicamente
             document.documentElement.style.setProperty('--primary-color', settingsData.primaryColor || '#28a745');
             document.documentElement.style.setProperty('--header-icon-color', settingsData.headerIconColor || '#28a745');
             document.documentElement.style.setProperty('--footer-icon-color', settingsData.footerIconColor || '#28a745');
@@ -69,7 +68,6 @@ function App() {
       }
     };
 
-    // Função para buscar módulos permitidos
     const fetchModulosPermitidos = async () => {
       try {
         const response = await fetch(`${baseUrl}${modulesTableId}/records`, {
@@ -84,7 +82,6 @@ function App() {
           const data = await response.json();
           if (data.list.length > 0) {
             const modulos = data.list[0];
-            // Extrai os módulos permitidos
             const novosModulosPermitidos = [];
             if (modulos.Modulo_Novidades) novosModulosPermitidos.push('Modulo_Novidades');
             if (modulos.Modulo_AcessoRapido) novosModulosPermitidos.push('Modulo_AcessoRapido');
@@ -100,16 +97,38 @@ function App() {
       }
     };
 
-    // Chama as funções para buscar configurações e módulos
     fetchAppSettings();
     fetchModulosPermitidos();
 
-    // Carrega os dados do cliente do localStorage, se existirem
     const savedDadosCliente = localStorage.getItem('dadosCliente');
     if (savedDadosCliente) {
       setDadosCliente(JSON.parse(savedDadosCliente));
     }
-  }, []); // Executa apenas na montagem do componente
+
+    // Verifica o consentimento do usuário ao carregar o app
+    const consent = localStorage.getItem('userConsent');
+    if (consent === 'true') {
+      setHasConsented(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Função para verificar o consentimento no localStorage a cada 1 segundo
+    const interval = setInterval(() => {
+      const consent = localStorage.getItem('userConsent');
+      if (consent === 'true') {
+        setHasConsented(true);  // Se o consentimento foi dado, não mostrar o popup
+      }
+    }, 1000); // A cada 1000ms (1 segundo)
+
+    // Limpeza do intervalo quando o componente for desmontado
+    return () => clearInterval(interval);
+  }, []);  // O efeito é executado apenas uma vez, quando o componente é montado
+
+  const handleConsent = (consent) => {
+    setHasConsented(consent);  // Atualiza o estado com base no consentimento
+  };
+
 
   const handleFooterChange = (newValue) => {
     setFooterValue(newValue);
@@ -118,6 +137,8 @@ function App() {
   return (
     <Router>
       <div className="app-container">
+      {!hasConsented && <ConsentPopup onConsent={handleConsent} />} {/* Exibe o popup se não houver consentimento */}
+
         {dadosCliente && <Header dadosCliente={dadosCliente} />}
         <Routes>
           <Route path="/" element={<Login onLogin={setDadosCliente} />} />
@@ -128,12 +149,13 @@ function App() {
           <Route path="/planos" element={<Planos />} />
           <Route path="/planos/:id" element={<PlanoDetalhes />} />
           <Route path="/financeiro" element={<Financeiro dados={dadosCliente} />} />
-          <Route path="/MinhaFatura" element={<MinhaFatura dados={dadosCliente} />} />        
+          <Route path="/MinhaFatura" element={<MinhaFatura dados={dadosCliente} />} />
           <Route path="/wifi" element={<MeuWifi dados={dadosCliente} />} />
           <Route path="/duvidas" element={<Duvidas />} />
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/dispositivos/:frequencia" element={<TodosOsDispositivos />} />
           <Route path="/dispositivos/ethernet" element={<TodosOsDispositivos frequencia="ethernet" />} />
+          <Route path="/privacidade" element={<PrivacyPolicy />} />  {/* Rota para a Política de Privacidade */}
           <Route path="/todos-hosts" element={<TodosHosts />} />
         </Routes>
         {dadosCliente && (
